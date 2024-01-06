@@ -3,6 +3,9 @@ import './App.css';
 import React from 'react';
 import RangeSlider from './RangeSlider.js';
 import './RangeSlider.css';
+import axios from "axios";
+
+
 
 /*const RangeSlider = ({ min, max, value, step, onChange }) => {
   const [minValue, setMinValue] = React.useState(value ? value.min : min);
@@ -83,7 +86,61 @@ const SliderBar = () => {
 
 
 function App() {
+  const CLIENT_ID = "3046f5477d6f4534bd1bedf8c4e61a38"
+const REDIRECT_URI = "http://localhost:3000"
+const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+const RESPONSE_TYPE = "token"
   const [value, setValue] = React.useState({ min: 0, max: 124 });
+  const [token, setToken] = React.useState("")
+
+    React.useEffect(() => {
+        const hash = window.location.hash
+        let token = window.localStorage.getItem("token")
+
+        if (!token && hash) {
+            token = hash.substring(1).split("&").find(elem => elem.startsWith("access_token")).split("=")[1]
+
+            window.location.hash = ""
+            window.localStorage.setItem("token", token)
+        }
+
+        setToken(token)
+
+    }, [])
+
+    const logout = () => {
+        setToken("")
+        window.localStorage.removeItem("token")
+    }
+
+    const [searchKey, setSearchKey] = React.useState("")
+    const [albums, setAlbums] = React.useState([])
+
+const searchAlbums = async (e) => {
+    e.preventDefault()
+    const {data} = await axios.get("https://api.spotify.com/v1/search", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        },
+        params: {
+            q: searchKey,
+            type: "album"
+        }
+    })
+    setAlbums(data.albums.items)
+}
+
+const renderAlbums = () => {
+  return albums.map(album => (
+      <div class="searchRow" key={album.id}>
+        <a href={album.uri}>
+          <div class="searchCol">{album.images.length ? <img width={"100%"} src={album.images[0].url} alt=""/> : <div>No Image</div>}</div>
+          <div class="searchCol">{album.name}</div>
+          <div class="searchCol">{album.release_date_precision !== "year" ? album.release_date.substring(0, 4) : album.release_date}</div>
+        </a>
+      </div>
+  ))
+}
   return (
     /*<div className="App">
       <header className="App-header">
@@ -102,8 +159,22 @@ function App() {
       </header>
     </div>*/
     <div className="App">
+      <div>
+      {!token ?
+                    <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
+                        to Spotify</a>
+                    : <div><button onClick={logout}>Logout</button>
+      <form onSubmit={searchAlbums}>
+    <input type="text" onChange={e => setSearchKey(e.target.value)}/>
+    <button type={"submit"}>Search</button>
+</form>
+
+{renderAlbums()}</div>}</div>
       <div class="container">
-        <RangeSlider />
+      
+      <RangeSlider />
+      
+      
       </div>
       {/* <div id="slider-root">
         <SliderBar />
@@ -112,5 +183,6 @@ function App() {
     </div>
   );
 }
+
 
 export default App;

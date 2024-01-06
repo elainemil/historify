@@ -5,7 +5,7 @@ import RangeSlider from './RangeSlider.js';
 import './RangeSlider.css';
 import axios from "axios";
 
-
+/* source: https://dev.to/dom_the_dev/how-to-use-the-spotify-api-in-your-react-js-app-50pn */
 
 /*const RangeSlider = ({ min, max, value, step, onChange }) => {
   const [minValue, setMinValue] = React.useState(value ? value.min : min);

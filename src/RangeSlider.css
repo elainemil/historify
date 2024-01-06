@@ -1,0 +1,41 @@
+.container {
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 200px;
+  }
+.albumBox {
+    height: 56px;
+    width: 56px;
+    margin: 2px;
+    float: left;
+    background-color: aquamarine;
+}
+.emptyBox {
+    height: 56px;
+    width: 56px;
+    margin: 2px;
+    float: left;
+    background-color: lightgray;
+}
+.albumsContainer {
+    width: 50%;
+    height: 720px;
+    float: left;
+}
+.sliderContainer {
+    width: 40%;
+    margin-right: 20px;
+    float: left;
+}
+.caption {
+    height: 100px;
+}
+.yearEntry {
+    width: 56px;
+    height: 76px;
+    margin: 2px;
+    float: left;
+}

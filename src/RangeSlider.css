@@ -1,7 +1,7 @@
 .container {
     height: 100%;
-    width: 100%;
-    display: flex;
+    /* width: 100%; */
+    /* display: flex; */
     justify-content: center;
     align-items: center;
     margin-top: 200px;
@@ -21,14 +21,14 @@
     background-color: lightgray;
 }
 .albumsContainer {
-    width: 50%;
+    width: 600px;
     height: 720px;
-    float: left;
+    /* float: left; */
 }
 .sliderContainer {
-    width: 40%;
+    width: 600px;
     margin-right: 20px;
-    float: left;
+    /* float: left; */
 }
 .caption {
     height: 100px;
@@ -43,4 +43,22 @@
 .albumImg {
     width: 56px;
     height: 56px;
+}
+
+.yearTag {
+    float: left;
+    padding-left: 4px;
+    font-size: small;
+}
+
+.yearDelete {
+    width: 10px;
+    height: 15px;
+    background-color: red;
+    float: right;
+}
+
+.clearButton {
+    background-color: red;
+    display: inline-block;
 }

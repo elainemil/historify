@@ -1,5 +1,5 @@
 .App {
-  text-align: center;
+  /* text-align: center; */
 }
 
 .App-logo {
@@ -148,14 +148,30 @@
 }
 
 .searchRow {
+	float: left;
 	width: 300px;
 	height: 100px;
+	padding: 2px;
 }
 
 .searchCol {
 	width: 100px;
 	height: 100px;
 	float: left;
+}
+
+.searchContainer {
+	float: left;
+	width: 300px;
+	padding-right: 5px;
+	vertical-align: middle;
+	background-color: lightgray;
+}
+
+.container {
+	width: 700px;
+	float: right;
+	vertical-align: middle;
 }
 
 @keyframes App-logo-spin {

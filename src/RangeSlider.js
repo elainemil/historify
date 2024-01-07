@@ -37,10 +37,24 @@ function valuetext(value) {
     //const initArray = Array(125).fill(null);
     let decades = [12];
     
+    const [style, setStyle] = React.useState({id: -1, display: 'none'});
 
     const handleChange = (event, newValue) => {
       setValue(newValue);
     };
+
+    const removeAlbum = (i) => {
+      if(i === -1){
+        console.log("in the clear");
+        for(let i = 0; i < 125; i++){
+          selected[i] = null;
+        }
+      }
+      else{
+        selected[i] = null;
+      }
+      setStyle({id: i, display: 'none'});
+    }
 
     let min = value[0]-1900;
     let max = value[1]-1900;
@@ -50,7 +64,14 @@ function valuetext(value) {
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;
     }
     for(let i = min; i <= max; i++){
-        albums.push(<div class="yearEntry"><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked ? <b>{i+1900}</b> : ''}</div></div>);
+        albums.push(<div class="yearEntry" onMouseEnter={e => {
+          setStyle({id: i, display: 'block'});
+      }}
+      onMouseLeave={e => {
+          setStyle({id: i, display: 'none'});
+      }}
+      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked ? <b class="yearTag">{i+1900}</b> : ''}</div>
+      {style.id === i && selected[i] !== null ? <button class="yearDelete" style={style} onClick={() => { removeAlbum(i)}}></button> : <br></br>}</div>);
     }
     for(let i = max+1; i < endRow; i++){
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;
@@ -68,6 +89,7 @@ function valuetext(value) {
           <div>
           <FormControlLabel control={<Checkbox checked={checked} onChange={handleCheck}/>} label="Show year labels" />
           </div>
+          <button class="clearButton" onClick={() => { removeAlbum(-1)}}>Clear Chart</button>
         </div>
         <Slider
           getAriaLabel={() => 'Date range'}

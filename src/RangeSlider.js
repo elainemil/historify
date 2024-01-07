@@ -50,7 +50,7 @@ function valuetext(value) {
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;
     }
     for(let i = min; i <= max; i++){
-        albums.push(<div class="yearEntry"><div class="albumBox">{selected[i] !== null ? <img class="albumImg" src={selected[i].images[0].url}></img> : <b>X</b>}</div><div>{checked ? <b>{i+1900}</b> : ''}</div></div>);
+        albums.push(<div class="yearEntry"><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked ? <b>{i+1900}</b> : ''}</div></div>);
     }
     for(let i = max+1; i < endRow; i++){
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;

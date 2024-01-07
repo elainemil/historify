@@ -134,14 +134,21 @@ const searchAlbums = async (e) => {
     setAlbums(data.albums.items)
 }
 
+
 const setAlbum = (album) => {
   selected[parseInt(album.release_date.substring(0, 4)) - 1900] = album;
+  setSelected(selected);
   console.log(selected);
 }
 
+const [seed, setSeed] = React.useState(1);
+       const reset = () => {
+            setSeed(Math.random());
+        }
+
 const renderAlbums = () => {
   return albums.map(album => (
-      <div class="searchRow" key={album.id}>
+      <div class="searchRow" key={album.id} onClick={reset}>
         <div type="submit" onClick={() => { setAlbum(album) }}>
           
           <div class="searchCol">{album.images.length ? <img width={"100%"} src={album.images[0].url} alt=""/> : <div>No Image</div>}</div>
@@ -182,7 +189,7 @@ const renderAlbums = () => {
 {renderAlbums()}</div>}</div>
       <div class="container">
       
-      <RangeSlider arr={selected}/>
+      <RangeSlider key={seed} arr={selected}/>
       
       
       </div>

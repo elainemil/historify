@@ -90,8 +90,13 @@ function App() {
 const REDIRECT_URI = "http://localhost:3000"
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 const RESPONSE_TYPE = "token"
+
+
+
   const [value, setValue] = React.useState({ min: 0, max: 124 });
-  const [token, setToken] = React.useState("")
+  const [token, setToken] = React.useState("");
+  const [selected, setSelected] = React.useState(Array.apply(null, Array(125)));
+  let albumSet = true;
 
     React.useEffect(() => {
         const hash = window.location.hash
@@ -130,14 +135,20 @@ const searchAlbums = async (e) => {
     setAlbums(data.albums.items)
 }
 
+const setAlbum = (album) => {
+  selected[parseInt(album.release_date.substring(0, 4)) - 1900] = album;
+  console.log(selected);
+}
+
 const renderAlbums = () => {
   return albums.map(album => (
       <div class="searchRow" key={album.id}>
-        <a href={album.uri}>
+        <div type="submit" onClick={() => { setAlbum(album) }}>
+          
           <div class="searchCol">{album.images.length ? <img width={"100%"} src={album.images[0].url} alt=""/> : <div>No Image</div>}</div>
           <div class="searchCol">{album.name}</div>
           <div class="searchCol">{album.release_date_precision !== "year" ? album.release_date.substring(0, 4) : album.release_date}</div>
-        </a>
+        </div>
       </div>
   ))
 }

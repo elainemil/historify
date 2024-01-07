@@ -39,3 +39,8 @@
     margin: 2px;
     float: left;
 }
+
+.albumImg {
+    width: 56px;
+    height: 56px;
+}

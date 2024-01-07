@@ -95,7 +95,7 @@ const RESPONSE_TYPE = "token"
 
   const [value, setValue] = React.useState({ min: 0, max: 124 });
   const [token, setToken] = React.useState("");
-  const [selected, setSelected] = React.useState(Array.apply(null, Array(125)));
+  const [selected, setSelected] = React.useState(Array(125).fill(null));
   let albumSet = true;
 
     React.useEffect(() => {
@@ -108,8 +108,7 @@ const RESPONSE_TYPE = "token"
             window.location.hash = ""
             window.localStorage.setItem("token", token)
         }
-
-        setToken(token)
+        setToken(token);
 
     }, [])
 
@@ -183,7 +182,7 @@ const renderAlbums = () => {
 {renderAlbums()}</div>}</div>
       <div class="container">
       
-      <RangeSlider />
+      <RangeSlider arr={selected}/>
       
       
       </div>

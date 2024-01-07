@@ -17,18 +17,26 @@ function valuetext(value) {
     return `${value}`;
   }
   
-  export default function RangeSlider() {
+  export default function RangeSlider(props) {
     const [checked, setChecked] = React.useState(true);
+    const [selected, setArr] = React.useState(props.arr);
+    let albums = [];
 
   const handleCheck = (event) => {
     setChecked(event.target.checked);
   };
+
+  React.useEffect( () => {
+    setArr(props.arr);
+}, [props.arr]);
+
+  
     
     
     const [value, setValue] = React.useState([1960, 2024]);
     //const initArray = Array(125).fill(null);
     let decades = [12];
-    let albums = [];
+    
 
     const handleChange = (event, newValue) => {
       setValue(newValue);
@@ -42,7 +50,7 @@ function valuetext(value) {
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;
     }
     for(let i = min; i <= max; i++){
-        albums.push(<div class="yearEntry"><div class="albumBox"></div><div>{checked ? <b>{i+1900}</b> : ''}</div></div>);
+        albums.push(<div class="yearEntry"><div class="albumBox">{selected[i] !== null ? <img class="albumImg" src={selected[i].images[0].url}></img> : <b>X</b>}</div><div>{checked ? <b>{i+1900}</b> : ''}</div></div>);
     }
     for(let i = max+1; i < endRow; i++){
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;

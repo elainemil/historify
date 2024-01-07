@@ -91,6 +91,13 @@ const REDIRECT_URI = "http://localhost:3000"
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
 const RESPONSE_TYPE = "token"
 
+let low = document.getElementById("lowBound");
+if(low === null){ low = 1960;}
+else{low = parseInt(document.getElementById("lowBound").innerHTML);}
+  
+let high = document.getElementById("highBound");
+if(high === null){ high = 2024;}
+else{high = parseInt(document.getElementById("highBound").innerHTML);}
 
 
   const [value, setValue] = React.useState({ min: 0, max: 124 });
@@ -109,6 +116,8 @@ const RESPONSE_TYPE = "token"
             window.localStorage.setItem("token", token)
         }
         setToken(token);
+        console.log(low);
+        console.log(high);
 
     }, [])
 
@@ -143,6 +152,10 @@ const setAlbum = (album) => {
 
 const [seed, setSeed] = React.useState(1);
        const reset = () => {
+        low = parseInt(document.getElementById("lowBound").innerHTML);
+        high = parseInt(document.getElementById("highBound").innerHTML);
+        console.log(document.getElementById("lowBound"));
+        console.log(high);
             setSeed(Math.random());
         }
 
@@ -189,7 +202,7 @@ const renderAlbums = () => {
 {renderAlbums()}</div>}</div>
       <div class="container">
       
-      <RangeSlider key={seed} arr={selected}/>
+      <RangeSlider key={seed} arr={selected} low={low === undefined ? 1960 : low} high={high === undefined ? 2024 : high}/>
       
       
       </div>

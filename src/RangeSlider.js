@@ -33,7 +33,7 @@ function valuetext(value) {
   
     
     
-    const [value, setValue] = React.useState([1960, 2024]);
+    const [value, setValue] = React.useState([props.low, props.high]);
     //const initArray = Array(125).fill(null);
     let decades = [12];
     
@@ -64,7 +64,7 @@ function valuetext(value) {
         <h2>Pick your favorite album of each year:</h2>
           <div class="caption">
           
-          Showing albums from {value[0]} to {value[1]}.
+          Showing albums from <b id="lowBound">{value[0]}</b> to <b id="highBound">{value[1]}</b>.
           <div>
           <FormControlLabel control={<Checkbox checked={checked} onChange={handleCheck}/>} label="Show year labels" />
           </div>

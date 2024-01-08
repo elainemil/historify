@@ -144,6 +144,7 @@ const searchAlbums = async (e) => {
 }
 
 
+
 const setAlbum = (album) => {
   selected[parseInt(album.release_date.substring(0, 4)) - 1900] = album;
   setSelected(selected);
@@ -195,7 +196,7 @@ const renderAlbums = () => {
                         to Spotify</a>
                     : <div><button onClick={logout}>Logout</button>
       <form onSubmit={searchAlbums}>
-    <input type="text" onChange={e => setSearchKey(e.target.value)}/>
+    <input type="text" onChange={e => setSearchKey(e.target.value)} />
     <button type={"submit"}>Search</button>
 </form>
 

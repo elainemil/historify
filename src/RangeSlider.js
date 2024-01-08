@@ -41,9 +41,16 @@ function valuetext(value) {
     let decades = [12];
     
     const [style, setStyle] = React.useState({id: -1, display: 'none'});
+    const [year, setYear] = React.useState(-1);
 
     const handleChange = (event, newValue) => {
       setValue(newValue);
+    };
+
+    const handleBrowse = (y) => {
+      if (document.getElementById("searchBar") !== null){
+        document.getElementById("searchBar").value = "year:"+y;
+      }
     };
 
     const removeAlbum = (i) => {
@@ -74,6 +81,7 @@ function valuetext(value) {
       }}
       onMouseLeave={e => {
           setStyle({id: -1, display: 'none'});
+          setYear(-1);
           console.log(i);
       }}
       ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked && style.id !== i? <b class="yearTag">{i+1900}</b> : ''}</div>
@@ -92,7 +100,7 @@ function valuetext(value) {
         },
       }}><div style={style} onClick={() => { }}><FaSearch class="yearBrowse" /></div></Tooltip> : <br></br>} */}
 {style.id === i && selected[i] !== null ? <div><FaTrashAlt style={style} class="iconTagDel" onClick={() => { removeAlbum(i)}}/></div> : <br></br>}
-{style.id === i  ? <FaSearch class="iconTagBr" onClick={() => { console.log("BROWSE")}}/> : <br></br>}
+{style.id === i  ? <FaSearch class="iconTagBr" onClick={() => { handleBrowse(i+1900)}}/> : <br></br>}
 
       </div>);
     }
@@ -125,6 +133,7 @@ function valuetext(value) {
         />
         </div>
           <div class="albumsContainer"><div>{albums}</div></div>
+          {/* {year !== -1 ? <div id="browseYear" >{year}</div> : <br></br>} */}
       </Box>
     );
   }

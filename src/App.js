@@ -130,6 +130,10 @@ else{high = parseInt(document.getElementById("highBound").innerHTML);}
     const [albums, setAlbums] = React.useState([])
 
 const searchAlbums = async (e) => {
+  if(searchKey === ""){
+    setAlbums([]);
+  }
+  else{
     e.preventDefault()
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
         headers: {
@@ -141,6 +145,7 @@ const searchAlbums = async (e) => {
         }
     })
     setAlbums(data.albums.items)
+  }
 }
 
 
@@ -195,8 +200,8 @@ const renderAlbums = () => {
                     <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
                         to Spotify</a>
                     : <div><button onClick={logout}>Logout</button>
-      <form onSubmit={searchAlbums}>
-    <input type="text" onChange={e => setSearchKey(e.target.value)} />
+      <form >
+    <input id="searchBar" type="text" onInputCapture={e => setSearchKey(e.target.value)} onChange={searchAlbums} />
     <button type={"submit"}>Search</button>
 </form>
 

@@ -7,7 +7,10 @@ import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import Tooltip from '@mui/material/Tooltip';
 import FormHelperText from '@mui/material/FormHelperText';
+
+import { FaTrashAlt, FaSearch } from "react-icons/fa";
 
 const initArray = Array(125).fill(null);
 
@@ -44,6 +47,7 @@ function valuetext(value) {
     };
 
     const removeAlbum = (i) => {
+      console.log("in remove function");
       if(i === -1){
         console.log("in the clear");
         for(let i = 0; i < 125; i++){
@@ -51,6 +55,7 @@ function valuetext(value) {
         }
       }
       else{
+        console.log("in else");
         selected[i] = null;
       }
       setStyle({id: i, display: 'none'});
@@ -68,10 +73,28 @@ function valuetext(value) {
           setStyle({id: i, display: 'block'});
       }}
       onMouseLeave={e => {
-          setStyle({id: i, display: 'none'});
+          setStyle({id: -1, display: 'none'});
+          console.log(i);
       }}
-      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked ? <b class="yearTag">{i+1900}</b> : ''}</div>
-      {style.id === i && selected[i] !== null ? <button class="yearDelete" style={style} onClick={() => { removeAlbum(i)}}></button> : <br></br>}</div>);
+      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked && style.id !== i? <b class="yearTag">{i+1900}</b> : ''}</div>
+      {/* {style.id === i && selected[i] === null ? <Tooltip title="Browse"
+      placement="right"
+      slotProps={{
+        popper: {
+          modifiers: [
+            {
+              name: 'offset',
+              options: {
+                offset:  [91, -70],
+              },
+            },
+          ],
+        },
+      }}><div style={style} onClick={() => { }}><FaSearch class="yearBrowse" /></div></Tooltip> : <br></br>} */}
+{style.id === i && selected[i] !== null ? <div><FaTrashAlt style={style} class="iconTagDel" onClick={() => { removeAlbum(i)}}/></div> : <br></br>}
+{style.id === i  ? <FaSearch class="iconTagBr" onClick={() => { console.log("BROWSE")}}/> : <br></br>}
+
+      </div>);
     }
     for(let i = max+1; i < endRow; i++){
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;
@@ -89,7 +112,7 @@ function valuetext(value) {
           <div>
           <FormControlLabel control={<Checkbox checked={checked} onChange={handleCheck}/>} label="Show year labels" />
           </div>
-          <button class="clearButton" onClick={() => { removeAlbum(-1)}}>Clear Chart</button>
+          <button class="clearButton" onClick={() => { removeAlbum(-1)}}>Clear Chart <FaTrashAlt /></button>
         </div>
         <Slider
           getAriaLabel={() => 'Date range'}

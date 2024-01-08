@@ -144,7 +144,7 @@
 	 top: 50%;
 	 margin-left: calc(16px / -2);
 	 transform: translate3d(0, -50%, 0);
-	 z-index: 2;
+	 /* z-index: 2; */
 }
 
 .searchRow {
@@ -170,7 +170,8 @@
 
 .container {
 	width: 700px;
-	float: right;
+	float: left;
+	padding-left: 10px;
 	vertical-align: middle;
 }
 

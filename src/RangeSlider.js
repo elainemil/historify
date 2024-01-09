@@ -9,8 +9,11 @@ import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Tooltip from '@mui/material/Tooltip';
 import FormHelperText from '@mui/material/FormHelperText';
+import html2canvas from 'html2canvas';
 
 import { FaTrashAlt, FaSearch } from "react-icons/fa";
+
+/* source: https://www.robinwieruch.de/react-component-to-image/ */
 
 const initArray = Array(125).fill(null);
 
@@ -21,6 +24,7 @@ function valuetext(value) {
   }
   
   export default function RangeSlider(props) {
+    const printRef = React.useRef();
     const [checked, setChecked] = React.useState(true);
     const [selected, setArr] = React.useState(props.arr);
     let albums = [];
@@ -34,7 +38,25 @@ function valuetext(value) {
 }, [props.arr]);
 
   
-    
+const handleDownloadImage = async () => {
+  const element = printRef.current;
+  const canvas = await html2canvas(element);
+
+  const data = canvas.toDataURL('image/jpg');
+  const link = document.createElement('a');
+
+  if (typeof link.download === 'string') {
+    link.href = data;
+    link.download = 'image.jpg';
+
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  } else {
+    window.open(data);
+  }
+};
+
     
     const [value, setValue] = React.useState([props.low, props.high]);
     //const initArray = Array(125).fill(null);
@@ -124,7 +146,7 @@ function valuetext(value) {
           <div>
           <FormControlLabel control={<Checkbox checked={checked} onChange={handleCheck}/>} label="Show year labels" />
           </div>
-          <button class="clearButton" onClick={() => { removeAlbum(-1)}}>Clear Chart <FaTrashAlt /></button>
+          <button class="clearButton" onClick={() => { removeAlbum(-1)}}>Clear Chart <FaTrashAlt /></button><button class="downloadBtn" onClick={handleDownloadImage}>Save Image</button>
         </div>
         <Slider
           getAriaLabel={() => 'Date range'}
@@ -136,7 +158,7 @@ function valuetext(value) {
           getAriaValueText={valuetext}
         />
         </div>
-          <div class="grid"><div class="albumsContainer"><div>{albums}</div></div></div>
+          <div ref={printRef} class="grid"><div class="albumsContainer"><div>{albums}</div></div></div>
           {/* {year !== -1 ? <div id="year" >{year}</div> : <br></br>} */}
       </Box>
     );

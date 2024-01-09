@@ -24,6 +24,7 @@
 .albumsContainer {
     width: 800px;
     height: 720px;
+    padding: 10px;
     float: right;
     /* float: left; */
 }
@@ -90,6 +91,11 @@
 
 .clearButton {
     background-color: red;
+    display: inline-block;
+}
+
+.downloadBtn {
+    background-color: yellow;
     display: inline-block;
 }
 

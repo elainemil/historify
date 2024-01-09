@@ -114,6 +114,8 @@ const listYears = years.map((d) => <button type="submit" onClick={e => setSearch
   let albumSet = true;
 
   
+  
+
 const handleCallback = (yearToSearch) => {
     this.setState({ year: yearToSearch });
 };
@@ -146,6 +148,9 @@ const searchAlbums = async (e) => {
   if(searchKey === ""){
     setAlbums([]);
   }
+  // if(searchKey !== document.getElementById("searchBar").value){
+  //   setSearchKey(document.getElementById("searchBar").value);
+  // }
   else{
     e.preventDefault()
     
@@ -161,7 +166,6 @@ const searchAlbums = async (e) => {
     setAlbums(data.albums.items)
   }
 }
-
 
 
 const setAlbum = (album) => {
@@ -185,7 +189,9 @@ const [seed, setSeed] = React.useState(1);
     tabValue(newValue);
   };
 
+
 const renderAlbums = () => {
+  
   return albums.map(album => (
       <div class="searchRow" key={album.id} onClick={reset}>
         <div type="submit" onClick={() => { setAlbum(album) }}>
@@ -215,12 +221,13 @@ const renderAlbums = () => {
       </header>
     </div>*/
     <div className="App">
+      <form name="searchForm" onSubmit={searchAlbums}>
       <div class="searchContainer">
       {!token ?
                     <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
                         to Spotify</a>
                     : <div><button onClick={logout}>Logout</button>
-      <form onSubmit={searchAlbums}>
+      
       <TabContext value={tab}>
       <Tabs value={tab} onChange={handleTab} aria-label="basic tabs example">
       <Tab label="Search Albums" value="1" />
@@ -232,17 +239,18 @@ const renderAlbums = () => {
     {listYears}
   </TabPanel>
   </TabContext>
-    
-    {/* <button type={"submit"}>Search</button> */}
-</form>
 
-{renderAlbums()}</div>}</div>
+    {/* <button type={"submit"}>Search</button> */}
+
+
+<div class="render" >{renderAlbums()}</div></div>}</div>
       <div class="container">
       
-      <RangeSlider key={seed} arr={selected} low={low === undefined ? 1960 : low} high={high === undefined ? 2024 : high}/>
-      
+      <RangeSlider key={seed} arr={selected} setSearchKey={setSearchKey} low={low === undefined ? 1960 : low} high={high === undefined ? 2024 : high}/>
+
       
       </div>
+      </form>
       {/* <div id="slider-root">
         <SliderBar />
       </div> */}

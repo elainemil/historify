@@ -49,6 +49,10 @@ function valuetext(value) {
 
     const handleBrowse = (y) => {
       console.log("BROWSE");
+      if(document.getElementById("searchBar") !== null){
+        console.log("BAR");
+        document.getElementById("searchBar").value = "year:"+y;
+      }
       setYear(y);
       // this.props.yearCallback("year:"+y);
     };
@@ -84,7 +88,7 @@ function valuetext(value) {
           /*setYear(-1);*/
           console.log(i);
       }}
-      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked /*&& selected[i] === null && style.id !== i*/ ? <b class="yearTag">{i+1900}</b> : ''}</div>
+      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked && style.id !== i ? <b class="yearTag">{i+1900}</b> : ''}</div>
       {/* {style.id === i && selected[i] === null ? <Tooltip title="Browse"
       placement="right"
       slotProps={{
@@ -99,9 +103,9 @@ function valuetext(value) {
           ],
         },
       }}><div style={style} onClick={() => { }}><FaSearch class="yearBrowse" /></div></Tooltip> : <br></br>} */}
-{style.id === i && selected[i] !== null ? <div><FaTrashAlt style={style} class="iconTagDel" onClick={() => { removeAlbum(i)}}/></div> : <br></br>}
-{/*{style.id === i  ? <FaSearch class="iconTagBr" onClick={() => { handleBrowse(i+1900)}}/> : <br></br>}*/}
 
+{style.id === i  ? <button class="btn" onClick={props.setSearchKey("year:"+(i+1900))} type="submit"><FaSearch class="iconTagBr" onClick={() => { handleBrowse(i+1900)}}  /></button> : <br></br>}
+{style.id === i && selected[i] !== null ? <button class="btn"><FaTrashAlt style={style} class="iconTagDel" onClick={() => { removeAlbum(i)}}/></button> : <br></br>}
       </div>);
     }
     for(let i = max+1; i < endRow; i++){

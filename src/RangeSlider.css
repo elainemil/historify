@@ -43,6 +43,12 @@
     float: left;
 }
 
+.btn {
+    background-color: transparent;
+    border: 0px;
+    float: left;
+}
+
 .albumImg {
     width: 76px;
     height: 76px;

@@ -162,7 +162,9 @@
 
 .searchContainer {
 	float: left;
-	width: 300px;
+	width: 400px;
+	max-height: 1000px;
+	overflow: auto;
 	padding-right: 5px;
 	vertical-align: middle;
 	background-color: lightgray;
@@ -170,9 +172,16 @@
 
 .container {
 	width: 700px;
-	float: left;
+	/* float: left; */
 	padding-left: 10px;
 	vertical-align: middle;
+}
+
+.yrList {
+	width: 10%;
+	padding-left: 2px;
+	float: left;
+	list-style-type: none;
 }
 
 @keyframes App-logo-spin {

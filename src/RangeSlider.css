@@ -4,6 +4,7 @@
     /* display: flex; */
     justify-content: center;
     align-items: center;
+    float: center;
     margin-top: 200px;
   }
 .albumBox {
@@ -23,11 +24,13 @@
 .albumsContainer {
     width: 800px;
     height: 720px;
+    float: right;
     /* float: left; */
 }
 .sliderContainer {
     width: 600px;
     margin-right: 20px;
+    float: right;
     /* float: left; */
 }
 .caption {
@@ -82,4 +85,8 @@
 .clearButton {
     background-color: red;
     display: inline-block;
+}
+
+.grid {
+    float: right;
 }

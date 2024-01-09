@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import RangeSlider from './RangeSlider.js';
+import { Tab, Tabs } from '@mui/material/';
+import { TabPanel, TabContext} from '@mui/lab/';
 import './RangeSlider.css';
 import axios from "axios";
 
@@ -98,12 +100,23 @@ else{low = parseInt(document.getElementById("lowBound").innerHTML);}
 let high = document.getElementById("highBound");
 if(high === null){ high = 2024;}
 else{high = parseInt(document.getElementById("highBound").innerHTML);}
+let years = [];
+for(let i = 1900; i <= 2024; i++){
+  years[i-1900] = i;
+}
+
+const listYears = years.map((d) => <button type="submit" onClick={e => setSearchKey("year:"+d)} class="yrList"><small><b><li>{d}</li></b></small></button>);
 
 
   const [value, setValue] = React.useState({ min: 0, max: 124 });
   const [token, setToken] = React.useState("");
   const [selected, setSelected] = React.useState(Array(125).fill(null));
   let albumSet = true;
+
+  
+const handleCallback = (yearToSearch) => {
+    this.setState({ year: yearToSearch });
+};
 
     React.useEffect(() => {
         const hash = window.location.hash
@@ -135,6 +148,7 @@ const searchAlbums = async (e) => {
   }
   else{
     e.preventDefault()
+    
     const {data} = await axios.get("https://api.spotify.com/v1/search", {
         headers: {
             Authorization: `Bearer ${token}`
@@ -164,6 +178,12 @@ const [seed, setSeed] = React.useState(1);
         console.log(high);
             setSeed(Math.random());
         }
+
+        const [tab, tabValue] = React.useState('1');
+
+  const handleTab = (event, newValue) => {
+    tabValue(newValue);
+  };
 
 const renderAlbums = () => {
   return albums.map(album => (
@@ -200,9 +220,20 @@ const renderAlbums = () => {
                     <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
                         to Spotify</a>
                     : <div><button onClick={logout}>Logout</button>
-      <form >
-    <input id="searchBar" type="text" onInputCapture={e => setSearchKey(e.target.value)} onChange={searchAlbums} />
-    <button type={"submit"}>Search</button>
+      <form onSubmit={searchAlbums}>
+      <TabContext value={tab}>
+      <Tabs value={tab} onChange={handleTab} aria-label="basic tabs example">
+      <Tab label="Search Albums" value="1" />
+            <Tab label="Browse by Year" value="2" />
+  </Tabs>
+  
+  <TabPanel value="1"><input id="searchBar" placeholder="Search Spotify..." type="text" onInputCapture={e => setSearchKey(e.target.value)} onChange={searchAlbums} /></TabPanel>
+  <TabPanel value="2" style={{maxHeight: 50, overflow: 'auto'}}>
+    {listYears}
+  </TabPanel>
+  </TabContext>
+    
+    {/* <button type={"submit"}>Search</button> */}
 </form>
 
 {renderAlbums()}</div>}</div>

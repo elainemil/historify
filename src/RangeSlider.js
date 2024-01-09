@@ -48,9 +48,9 @@ function valuetext(value) {
     };
 
     const handleBrowse = (y) => {
-      if (document.getElementById("searchBar") !== null){
-        document.getElementById("searchBar").value = "year:"+y;
-      }
+      console.log("BROWSE");
+      setYear(y);
+      // this.props.yearCallback("year:"+y);
     };
 
     const removeAlbum = (i) => {
@@ -81,10 +81,10 @@ function valuetext(value) {
       }}
       onMouseLeave={e => {
           setStyle({id: -1, display: 'none'});
-          setYear(-1);
+          /*setYear(-1);*/
           console.log(i);
       }}
-      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked && style.id !== i? <b class="yearTag">{i+1900}</b> : ''}</div>
+      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked /*&& selected[i] === null && style.id !== i*/ ? <b class="yearTag">{i+1900}</b> : ''}</div>
       {/* {style.id === i && selected[i] === null ? <Tooltip title="Browse"
       placement="right"
       slotProps={{
@@ -100,7 +100,7 @@ function valuetext(value) {
         },
       }}><div style={style} onClick={() => { }}><FaSearch class="yearBrowse" /></div></Tooltip> : <br></br>} */}
 {style.id === i && selected[i] !== null ? <div><FaTrashAlt style={style} class="iconTagDel" onClick={() => { removeAlbum(i)}}/></div> : <br></br>}
-{style.id === i  ? <FaSearch class="iconTagBr" onClick={() => { handleBrowse(i+1900)}}/> : <br></br>}
+{/*{style.id === i  ? <FaSearch class="iconTagBr" onClick={() => { handleBrowse(i+1900)}}/> : <br></br>}*/}
 
       </div>);
     }
@@ -132,8 +132,8 @@ function valuetext(value) {
           getAriaValueText={valuetext}
         />
         </div>
-          <div class="albumsContainer"><div>{albums}</div></div>
-          {/* {year !== -1 ? <div id="browseYear" >{year}</div> : <br></br>} */}
+          <div class="grid"><div class="albumsContainer"><div>{albums}</div></div></div>
+          {/* {year !== -1 ? <div id="year" >{year}</div> : <br></br>} */}
       </Box>
     );
   }

@@ -11,7 +11,7 @@ import Tooltip from '@mui/material/Tooltip';
 import FormHelperText from '@mui/material/FormHelperText';
 import html2canvas from 'html2canvas';
 
-import { FaTrashAlt, FaSearch } from "react-icons/fa";
+import { FaTrashAlt, FaSearch, FaFileDownload } from "react-icons/fa";
 
 /* source: https://www.robinwieruch.de/react-component-to-image/ */
 
@@ -57,6 +57,7 @@ const handleDownloadImage = async () => {
   }
 };
 
+
     
     const [value, setValue] = React.useState([props.low, props.high]);
     //const initArray = Array(125).fill(null);
@@ -98,6 +99,7 @@ const handleDownloadImage = async () => {
     let max = value[1]-1900;
     let startRow = min-(min%10);
     let endRow = max+(10-(max%10));
+
     for(let i = startRow; i < min; i++){
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;
     }
@@ -146,7 +148,7 @@ const handleDownloadImage = async () => {
           <div>
           <FormControlLabel control={<Checkbox checked={checked} onChange={handleCheck}/>} label="Show year labels" />
           </div>
-          <button class="clearButton" onClick={() => { removeAlbum(-1)}}>Clear Chart <FaTrashAlt /></button><button class="downloadBtn" onClick={handleDownloadImage}>Save Image</button>
+          <div class="clearButton" onClick={() => { removeAlbum(-1)}}>Clear Chart <FaTrashAlt /></div><div class="downloadBtn" onClick={handleDownloadImage}>Save Image <FaFileDownload /></div>
         </div>
         <Slider
           getAriaLabel={() => 'Date range'}

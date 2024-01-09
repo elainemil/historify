@@ -167,6 +167,18 @@ const searchAlbums = async (e) => {
   }
 }
 
+const getTracks = async (e) => {
+  /*e.preventDefault()
+    
+    const {data} = await axios.get("https://api.spotify.com/v1/top/tracks", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+    })
+    console.log(data);
+  */
+}
+
 
 const setAlbum = (album) => {
   selected[parseInt(album.release_date.substring(0, 4)) - 1900] = album;
@@ -231,12 +243,13 @@ const renderAlbums = () => {
       <TabContext value={tab}>
       <Tabs value={tab} onChange={handleTab} aria-label="basic tabs example">
       <Tab label="Search Albums" value="1" />
-            <Tab label="Browse by Year" value="2" />
+            <Tab label="Use Stats" value="2" />
   </Tabs>
   
-  <TabPanel value="1"><input id="searchBar" placeholder="Search Spotify..." type="text" onInputCapture={e => setSearchKey(e.target.value)} onChange={searchAlbums} /></TabPanel>
+  <TabPanel value="1"><input id="searchBar" class="searchBar" placeholder="Search Spotify..." type="text" onInputCapture={e => setSearchKey(e.target.value)} onChange={searchAlbums} /></TabPanel>
   <TabPanel value="2" style={{maxHeight: 50, overflow: 'auto'}}>
-    {listYears}
+    {/*listYears*/}
+    <button onClick={e => getTracks()}>Fill from Top Tracks</button>
   </TabPanel>
   </TabContext>
 

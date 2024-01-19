@@ -2,7 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import RangeSlider from './RangeSlider.js';
-import { Tab, Tabs } from '@mui/material/';
+import { Tab, Tabs, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material/';
 import { TabPanel, TabContext} from '@mui/lab/';
 import './RangeSlider.css';
 import axios from "axios";
@@ -91,6 +91,7 @@ function App() {
   const CLIENT_ID = "3046f5477d6f4534bd1bedf8c4e61a38"
 const REDIRECT_URI = "http://localhost:3000"
 const AUTH_ENDPOINT = "https://accounts.spotify.com/authorize"
+const SCOPE = "user-top-read"
 const RESPONSE_TYPE = "token"
 
 let low = document.getElementById("lowBound");
@@ -111,6 +112,7 @@ const listYears = years.map((d) => <button type="submit" onClick={e => setSearch
   const [value, setValue] = React.useState({ min: 0, max: 124 });
   const [token, setToken] = React.useState("");
   const [selected, setSelected] = React.useState(Array(125).fill(null));
+  const [tempLineup, setTempLineup] = React.useState(Array(125).fill(null));
   let albumSet = true;
 
   
@@ -143,6 +145,7 @@ const handleCallback = (yearToSearch) => {
 
     const [searchKey, setSearchKey] = React.useState("")
     const [albums, setAlbums] = React.useState([])
+    const [tracks, setTracks] = React.useState([])
 
 const searchAlbums = async (e) => {
   if(searchKey === ""){
@@ -168,22 +171,59 @@ const searchAlbums = async (e) => {
 }
 
 const getTracks = async (e) => {
-  /*e.preventDefault()
-    
-    const {data} = await axios.get("https://api.spotify.com/v1/top/tracks", {
+  // if(searchKey !== document.getElementById("searchBar").value){
+  //   setSearchKey(document.getElementById("searchBar").value);
+  // }
+  console.log("TERM: " + term);
+  e.preventDefault()
+    if(term !== document.getElementById("term-select").value){
+      console.log(document.getElementById("term-select"));
+    }
+    const {data} = await axios.get("https://api.spotify.com/v1/me/top/tracks?time_range=" + term + "&limit=50&offset=0", {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
-    console.log(data);
-  */
+    setTracks(data.items)
+    //console.log(tracks)
+    var yrs = Array(125).fill(null);
+    for(let i = 0; i < 50; i++){
+      if(yrs[parseInt(tracks[i].album.release_date.substring(0, 4)) - 1900] === null){
+        yrs[parseInt(tracks[i].album.release_date.substring(0, 4)) - 1900] = tracks[i].album;
+        setAlbum(tracks[i].album)
+      }
+      else{
+        var inArr = 0;
+        var outArr = 0;
+        for(let j = 0; j < 50; j++){
+          if(tracks[j].album !== null && tracks[j].album.id === yrs[parseInt(tracks[i].album.release_date.substring(0, 4)) - 1900].id){
+            inArr++;
+          }
+          if(tracks[j].album !== null && tracks[j].album.id === tracks[i].album.id){
+            outArr++;
+          }
+        }
+        if(outArr > inArr){
+          setAlbum(tracks[i].album)
+        }
+        console.log(i + " out: " + outArr + " in: " + inArr)
+      }
+    }
+    // for(let i = 0; i < 50; i++){
+    //   if(tracks[i].album !== null){
+    //     setAlbum(tracks[i].album)
+    //   }
+    // }
+  
 }
+
+
 
 
 const setAlbum = (album) => {
   selected[parseInt(album.release_date.substring(0, 4)) - 1900] = album;
   setSelected(selected);
-  console.log(selected);
+  //console.log(selected);
 }
 
 const [seed, setSeed] = React.useState(1);
@@ -199,6 +239,12 @@ const [seed, setSeed] = React.useState(1);
 
   const handleTab = (event, newValue) => {
     tabValue(newValue);
+  };
+
+  const [term, setTerm] = React.useState('');
+
+  const handleTermChange = (event) => {
+    setTerm(event.target.value);
   };
 
 
@@ -236,7 +282,7 @@ const renderAlbums = () => {
       <form name="searchForm" onSubmit={searchAlbums}>
       <div class="searchContainer">
       {!token ?
-                    <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}`}>Login
+                    <a href={`${AUTH_ENDPOINT}?client_id=${CLIENT_ID}&redirect_uri=${REDIRECT_URI}&response_type=${RESPONSE_TYPE}&scope=${SCOPE}`}>Login
                         to Spotify</a>
                     : <div><button onClick={logout}>Logout</button>
       
@@ -249,7 +295,23 @@ const renderAlbums = () => {
   <TabPanel value="1"><input id="searchBar" class="searchBar" placeholder="Search Spotify..." type="text" onInputCapture={e => setSearchKey(e.target.value)} onChange={searchAlbums} /></TabPanel>
   <TabPanel value="2" style={{maxHeight: 50, overflow: 'auto'}}>
     {/*listYears*/}
-    <button onClick={e => getTracks()}>Fill from Top Tracks</button>
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="term-label">Term Length</InputLabel>
+        <Select
+          labelId="term-label"
+          id="term-select"
+          value={term}
+          label="Term Length"
+          onChange={handleTermChange}
+        >
+          <MenuItem value={"short_term"}>Last Month</MenuItem>
+          <MenuItem value={"medium_term"}>Last Six Months</MenuItem>
+          <MenuItem value={"long_term"}>All Time</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+    { term !== "" ? <button onClick={getTracks}>Fill from Top Tracks of {term}</button> : <br></br>}
   </TabPanel>
   </TabContext>
 

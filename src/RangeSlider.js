@@ -26,11 +26,17 @@ function valuetext(value) {
   export default function RangeSlider(props) {
     const printRef = React.useRef();
     const [checked, setChecked] = React.useState(true);
+    const [showList, setShowList] = React.useState(false);
     const [selected, setArr] = React.useState(props.arr);
     let albums = [];
+    let titles = [];
 
   const handleCheck = (event) => {
     setChecked(event.target.checked);
+  };
+
+  const handleShowList = (event) => {
+    setShowList(event.target.checked);
   };
 
   React.useEffect( () => {
@@ -135,6 +141,13 @@ const handleDownloadImage = async () => {
     for(let i = max+1; i < endRow; i++){
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;
     }
+
+    // for(let i = min; i < max; i++){
+    //   if(selected[i] !== null){
+    //   titles[i] = <div><b>{selected[i].artists[0]} - {selected[i].name}</b></div>
+    //   }
+    
+    // }
   
     return (
       <Box sx={{ width: 1200 }}>
@@ -147,6 +160,7 @@ const handleDownloadImage = async () => {
           Showing albums from <b id="lowBound">{value[0]}</b> to <b id="highBound">{value[1]}</b>.
           <div>
           <FormControlLabel control={<Checkbox checked={checked} onChange={handleCheck}/>} label="Show year labels" />
+          <FormControlLabel control={<Checkbox checked={showList} onChange={handleShowList}/>} label="Show album titles" />
           </div>
           <div class="clearButton" onClick={() => { removeAlbum(-1)}}>Clear Chart <FaTrashAlt /></div><div class="downloadBtn" onClick={handleDownloadImage}>Save Image <FaFileDownload /></div>
         </div>
@@ -162,6 +176,7 @@ const handleDownloadImage = async () => {
         </div>
           <div ref={printRef} class="grid"><div class="albumsContainer"><div>{albums}</div></div></div>
           {/* {year !== -1 ? <div id="year" >{year}</div> : <br></br>} */}
+          {/* {showList ? <div>{titles}</div> : <br></br>} */}
       </Box>
     );
   }

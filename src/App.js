@@ -176,18 +176,40 @@ const getTracks = async (e) => {
   // }
   console.log("TERM: " + term);
   e.preventDefault()
+  var numTracks = 50
     if(term !== document.getElementById("term-select").value){
       console.log(document.getElementById("term-select"));
     }
+    if(term === "all"){
+      var dataFull = []
+      var termTemp = ["long_term", "medium_term", "short_term"]
+      for(var idx = 0; idx < 3; idx++){
+      const {data} = await axios.get("https://api.spotify.com/v1/me/top/tracks?time_range=" + termTemp[idx] + "&limit=50&offset=0", {
+        headers: {
+            Authorization: `Bearer ${token}`
+        }
+      })
+      
+      dataFull = dataFull.concat(data.items)
+    }
+      
+      numTracks = 150
+      console.log(dataFull)
+      setTracks(dataFull)
+    }
+    else{
     const {data} = await axios.get("https://api.spotify.com/v1/me/top/tracks?time_range=" + term + "&limit=50&offset=0", {
         headers: {
             Authorization: `Bearer ${token}`
         }
     })
+    console.log(data.items)
     setTracks(data.items)
+    }
     //console.log(tracks)
     var yrs = Array(125).fill(null);
-    for(let i = 0; i < 50; i++){
+    console.log(tracks)
+    for(let i = 0; i < numTracks; i++){
       if(yrs[parseInt(tracks[i].album.release_date.substring(0, 4)) - 1900] === null){
         yrs[parseInt(tracks[i].album.release_date.substring(0, 4)) - 1900] = tracks[i].album;
         setAlbum(tracks[i].album)
@@ -195,7 +217,7 @@ const getTracks = async (e) => {
       else{
         var inArr = 0;
         var outArr = 0;
-        for(let j = 0; j < 50; j++){
+        for(let j = 0; j < numTracks; j++){
           if(tracks[j].album !== null && tracks[j].album.id === yrs[parseInt(tracks[i].album.release_date.substring(0, 4)) - 1900].id){
             inArr++;
           }
@@ -308,6 +330,7 @@ const renderAlbums = () => {
           <MenuItem value={"short_term"}>Last Month</MenuItem>
           <MenuItem value={"medium_term"}>Last Six Months</MenuItem>
           <MenuItem value={"long_term"}>All Time</MenuItem>
+          <MenuItem value={"all"}>All Stats</MenuItem>
         </Select>
       </FormControl>
     </Box>

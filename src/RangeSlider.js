@@ -141,13 +141,17 @@ const handleDownloadImage = async () => {
     for(let i = max+1; i < endRow; i++){
         albums[i] = <div class="yearEntry"><div class="emptyBox"></div><div></div></div>;
     }
-
-    // for(let i = min; i < max; i++){
-    //   if(selected[i] !== null){
-    //   titles[i] = <div><b>{selected[i].artists[0]} - {selected[i].name}</b></div>
-    //   }
+    console.log(albums)
+    console.log(selected)
+    for(let i = min; i <= max; i++){
+      if(selected[i] !== null){
+      titles.push(<a class="listAlbums" href={selected[i].uri}><div>{i+1900}: {selected[i].artists[0].name} - {selected[i].name}</div></a>)
+      }
+      else{
+        titles.push(<div>{i+1900}:</div>);
+      }
     
-    // }
+    }
   
     return (
       <Box sx={{ width: 1200 }}>
@@ -174,9 +178,13 @@ const handleDownloadImage = async () => {
           getAriaValueText={valuetext}
         />
         </div>
+
+        <div>
           <div ref={printRef} class="grid"><div class="albumsContainer"><div>{albums}</div></div></div>
           {/* {year !== -1 ? <div id="year" >{year}</div> : <br></br>} */}
-          {/* {showList ? <div>{titles}</div> : <br></br>} */}
+          {showList ? <div class="list"><b>{titles}</b><br></br></div> : <br></br>}
+        </div>
+
       </Box>
     );
   }

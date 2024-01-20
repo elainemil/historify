@@ -5,7 +5,7 @@
     justify-content: center;
     align-items: center;
     float: center;
-    margin-top: 200px;
+    /* margin-top: 200px; */
   }
 .albumBox {
     height: 76px;
@@ -117,4 +117,15 @@
 
 .grid {
     float: right;
+    overflow-x: hidden;
+}
+
+.listAlbums {
+    text-decoration: none;
+    color: black;
+    /* float: left; */
+}
+
+.list {
+    float: left;
 }

@@ -1,17 +1,23 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 import Slider from '@mui/material/Slider';
 import AlbumArray from './AlbumArray.js'
 import Checkbox from '@mui/material/Checkbox';
 import FormLabel from '@mui/material/FormLabel';
 import FormControl from '@mui/material/FormControl';
+import Select from '@mui/material/Select';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
+import MenuItem from '@mui/material/MenuItem';
 import Tooltip from '@mui/material/Tooltip';
 import FormHelperText from '@mui/material/FormHelperText';
+import Typography from '@mui/material/Typography';
+import DialogTitle from '@mui/material/DialogTitle';
+import Dialog from '@mui/material/Dialog';
 import html2canvas from 'html2canvas';
 
-import { FaTrashAlt, FaSearch, FaFileDownload } from "react-icons/fa";
+import { FaTrashAlt, FaSearch, FaFileDownload, FaEdit } from "react-icons/fa";
 
 /* source: https://www.robinwieruch.de/react-component-to-image/ */
 
@@ -19,17 +25,74 @@ const initArray = Array(125).fill(null);
 
 
 
+// function SimpleDialog(props) {
+//   const { onClose, selectedValue, open } = props;
+
+//   const handleClose = () => {
+//     onClose(selectedValue);
+//   };
+
+//   const handleListItemClick = (value) => {
+//     onClose(value);
+//   };
+
+//   return (
+//     <Dialog onClose={handleClose} open={open}>
+//       <DialogTitle>In which year does this album belong?</DialogTitle>
+//       {editId !== -1 ? <a href={albums[editId] !== null ? albums[editId].uri : ""}><img id="smallGrid" class="albumImg" src={albums[editId].images[0].url}></img></a> : <br></br>}
+//       <FormControl sx={{ mt: 2, minWidth: 120 }}>
+//               <Select
+//                 autoFocus
+//                 // onChange={setAlbumYear}
+//                 value={editId+1900}
+//                 inputProps={{
+//                   name: 'max-width',
+//                   id: 'max-width',
+//                 }}
+//               >
+//                 <MenuItem value="1990">1990</MenuItem>
+//                 <MenuItem value="1991">1991</MenuItem>
+//                 <MenuItem value="1992">1992</MenuItem>
+//                 <MenuItem value="1993">1993</MenuItem>
+//                 <MenuItem value="1994">1994</MenuItem>
+//               </Select>
+//             </FormControl>
+      
+//     </Dialog>
+//   );
+// }
+
+// SimpleDialog.propTypes = {
+//   onClose: PropTypes.func.isRequired,
+//   open: PropTypes.bool.isRequired,
+//   selectedValue: PropTypes.string.isRequired,
+// };
+
+
+
 function valuetext(value) {
     return `${value}`;
   }
   
+  
+
   export default function RangeSlider(props) {
     const printRef = React.useRef();
     const [checked, setChecked] = React.useState(true);
     const [showList, setShowList] = React.useState(false);
     const [selected, setArr] = React.useState(props.arr);
+    const [open, setOpen] = React.useState(false);
     let albums = [];
     let titles = [];
+
+    // const handleClickOpen = (i) => {
+    //   setOpen(true);
+    //   editId = i;
+    // };
+  
+    // const handleClose = (value) => {
+    //   setOpen(false);
+    // };
 
   const handleCheck = (event) => {
     setChecked(event.target.checked);
@@ -45,15 +108,26 @@ function valuetext(value) {
 
   
 const handleDownloadImage = async () => {
+  setShowList(true);
   const element = printRef.current;
   const canvas = await html2canvas(element);
 
-  const data = canvas.toDataURL('image/jpg');
+  html2canvas(document.body,
+    {
+    useCORS: true, //By passing this option in function Cross origin images will be rendered properly in the downloaded version of the PDF
+    allowTaint: true,
+    onrendered: function (canvas) {
+      
+     }
+    });
+
+    // document.getElementById("smallGrid").append(canvas);
+  const data = canvas.toDataURL('historify/jpg');
   const link = document.createElement('a');
 
   if (typeof link.download === 'string') {
     link.href = data;
-    link.download = 'image.jpg';
+    link.download = 'historify.jpg';
 
     document.body.appendChild(link);
     link.click();
@@ -118,7 +192,7 @@ const handleDownloadImage = async () => {
           /*setYear(-1);*/
           console.log(i);
       }}
-      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked && style.id !== i ? <b class="yearTag">{i+1900}</b> : ''}</div>
+      ><div class="albumBox">{selected[i] !== null ? <a href={selected[i] !== null ? selected[i].uri : ""}><img id="smallGrid" class="albumImg" src={selected[i].images[0].url}></img></a> : <br></br>}</div><div>{checked && style.id !== i ? <b class="yearTag">{i+1900}</b> : ''}</div>
       {/* {style.id === i && selected[i] === null ? <Tooltip title="Browse"
       placement="right"
       slotProps={{
@@ -136,6 +210,7 @@ const handleDownloadImage = async () => {
 
 {style.id === i  ? <button class="btn" onClick={props.setSearchKey("year:"+(i+1900))} type="submit"><FaSearch class="iconTagBr" onClick={() => { handleBrowse(i+1900)}}  /></button> : <br></br>}
 {style.id === i && selected[i] !== null ? <button class="btn"><FaTrashAlt style={style} class="iconTagDel" onClick={() => { removeAlbum(i)}}/></button> : <br></br>}
+{/* {style.id === i && selected[i] !== null ? <button class="btn"><FaEdit style={style} class="iconTagEdit" onClick={handleClickOpen(i)}/></button> : <br></br>} */}
       </div>);
     }
     for(let i = max+1; i < endRow; i++){
@@ -158,7 +233,7 @@ const handleDownloadImage = async () => {
           
           <div class="sliderContainer">
           <h1>Welcome to Historify!</h1>
-        <h2>Pick your favorite album of each year:</h2>
+        <h2>Pick your favorite album of each year</h2>
           <div class="caption">
           
           Showing albums from <b id="lowBound">{value[0]}</b> to <b id="highBound">{value[1]}</b>.
@@ -180,10 +255,14 @@ const handleDownloadImage = async () => {
         </div>
 
         <div>
-          <div ref={printRef} class="grid"><div class="albumsContainer"><div>{albums}</div></div></div>
+          <div id="bigGrid" class="grid"><div class="albumsContainer"><div>{albums}</div></div></div>
           {/* {year !== -1 ? <div id="year" >{year}</div> : <br></br>} */}
-          {showList ? <div class="list"><b>{titles}</b><br></br></div> : <br></br>}
+          <div ref={printRef}>{showList ? <div class="list"><b>{titles}</b><br></br></div> : <br></br>}</div>
         </div>
+        {/* <SimpleDialog
+        open={open}
+        onClose={handleClose}
+      /> */}
 
       </Box>
     );

@@ -158,15 +158,27 @@
 	font-size: 14px;
 	overflow: hidden;
   	text-overflow: ellipsis;
-	width: 100px;
+	width: 70px;
 	height: 100px;
 	float: left;
+}
+
+.editButton {
+	float: left;
+	color: orangered;
+	width: 20px;
+}
+
+.delButton {
+	float: left;
+	color: orangered;
+	width: 20px;
 }
 
 .searchContainer {
 	float: left;
 	width: 350px;
-	max-height: 1000px;
+	max-height: 1500px;
 	overflow: auto;
 	padding-right: 5px;
 	vertical-align: middle;

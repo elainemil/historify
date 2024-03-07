@@ -2,12 +2,82 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import RangeSlider from './RangeSlider.js';
-import { Tab, Tabs, Box, FormControl, InputLabel, Select, MenuItem } from '@mui/material/';
+import { Tab, List, ListItem, ListItemButton, ListItemText, Tabs, Box, FormControl, InputLabel, Select, MenuItem, Dialog, DialogTitle, TooltipComponentsPropsOverrides, FormHelperText, Typography } from '@mui/material/';
 import { TabPanel, TabContext} from '@mui/lab/';
 import './RangeSlider.css';
 import axios from "axios";
+import { FaEdit, FaTrash } from 'react-icons/fa';
+import PropTypes from 'prop-types';
 
 /* source: https://dev.to/dom_the_dev/how-to-use-the-spotify-api-in-your-react-js-app-50pn */
+
+const years = ["1900","1901","1902","1903","1904","1905","1906","1907","1908","1909",
+                "1910","1911","1912","1913","1914","1915","1916","1917","1918","1919",
+                "1920","1921","1922","1923","1924","1925","1926","1927","1928","1929",
+                "1930","1931","1932","1933","1934","1935","1936","1937","1938","1939",
+                "1940","1941","1942","1943","1944","1945","1946","1947","1948","1949",
+                "1950","1951","1952","1953","1954","1955","1956","1957","1958","1959",
+                "1960","1961","1962","1963","1964","1965","1966","1967","1968","1969",
+                "1970","1971","1972","1973","1974","1975","1976","1977","1978","1979",
+                "1980","1981","1982","1983","1984","1985","1986","1987","1988","1989",
+                "1990","1991","1992","1993","1994","1995","1996","1997","1998","1999",
+                "2000","2001","2002","2003","2004","2005","2006","2007","2008","2009",
+                "2010","2011","2012","2013","2014","2015","2016","2017","2018","2019",
+                "2020","2021","2022","2023","2024"]
+
+function SimpleDialog(props) {
+  const { onClose, selectedValue, editAlbum, open } = props;
+
+  const handleClose = () => {
+    onClose(selectedValue);
+  };
+
+  const handleListItemClick = (value) => {
+    onClose(editAlbum, value);
+  };
+
+  const handleChange = (event) => {
+    handleListItemClick(event.target.value);
+  };
+
+  return (
+    <Dialog onClose={handleClose} open={open}>
+      <center><DialogTitle>Edit Year</DialogTitle>
+      <Typography>In which year does this album belong?</Typography>
+      {editAlbum !== null ? <img width={"25%"} src={editAlbum.images[0].url} alt=""/> : <br></br>}</center>
+      {/* <List sx={{ pt: 0 }}>
+        {years.map((year) => (
+          <ListItem disableGutters key={year}>
+            <ListItemButton onClick={() => handleListItemClick(year)}>
+            <ListItemText primary={year} />
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List> */}
+      <FormControl fullWidth>
+        <InputLabel>Year</InputLabel>
+        <Select
+          label="Year"
+          defaultValue={selectedValue}
+          onChange={handleChange}
+        >
+          {years.map((year) => (
+          <MenuItem key={year} value={year}>
+            {year}
+          </MenuItem>
+            
+        ))}
+        </Select>
+      </FormControl>
+    </Dialog>
+  );
+}
+
+SimpleDialog.propTypes = {
+  onClose: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  selectedValue: PropTypes.string.isRequired,
+};
 
 /*const RangeSlider = ({ min, max, value, step, onChange }) => {
   const [minValue, setMinValue] = React.useState(value ? value.min : min);
@@ -105,7 +175,7 @@ let years = [];
 for(let i = 1900; i <= 2024; i++){
   years[i-1900] = i;
 }
-
+let isEditing = "";
 const listYears = years.map((d) => <button type="submit" onClick={e => setSearchKey("year:"+d)} class="yrList"><small><b><li>{d}</li></b></small></button>);
 
 
@@ -146,6 +216,9 @@ const handleCallback = (yearToSearch) => {
     const [searchKey, setSearchKey] = React.useState("")
     const [albums, setAlbums] = React.useState([])
     const [tracks, setTracks] = React.useState([])
+    const [open, setOpen] = React.useState(false);
+    const [selectedValue, setSelectedValue] = React.useState(1900);
+    const [editAlbum, setEditAlbum] = React.useState(null);
 
 const searchAlbums = async (e) => {
   if(searchKey === ""){
@@ -236,10 +309,21 @@ const getTracks = async (e) => {
     //     setAlbum(tracks[i].album)
     //   }
     // }
-  
+  reset();
 }
 
+const handleClickOpen = (album) => {
+  setEditAlbum(album);
+  setSelectedValue(album.release_date.substring(0, 4))
+  setOpen(true);
+  console.log("HANDLECLICKOPEN: " + album.name);
+};
 
+const handleClose = (editAlbum, value) => {
+  setOpen(false);
+  setAlbumCustom(editAlbum, parseInt(value));
+  setSelectedValue(value);
+};
 
 
 const setAlbum = (album) => {
@@ -248,13 +332,30 @@ const setAlbum = (album) => {
   //console.log(selected);
 }
 
+const setAlbumCustom = (album, date) => {
+  selected[date - 1900] = album;
+  setSelected(selected);
+  //console.log(selected);
+}
+
+const setEditStatus = (id) => {
+  isEditing = id + "";
+  console.log(isEditing)
+}
+
 const [seed, setSeed] = React.useState(1);
        const reset = () => {
         low = parseInt(document.getElementById("lowBound").innerHTML);
         high = parseInt(document.getElementById("highBound").innerHTML);
+        setTerm(term);
+        console.log("NEW TERM: " + term);
         console.log(document.getElementById("lowBound"));
         console.log(high);
             setSeed(Math.random());
+        }
+        const resetTemp = (id) => {
+          console.log(id)
+          console.log("EDITEDITEDIT")
         }
 
         const [tab, tabValue] = React.useState('1');
@@ -272,15 +373,24 @@ const [seed, setSeed] = React.useState(1);
 
 const renderAlbums = () => {
   
+  console.log(albums);
+  
   return albums.map(album => (
       <div class="searchRow" key={album.id} onClick={reset}>
         <div type="submit" onClick={() => { setAlbum(album) }}>
           
           <div class="searchCol">{album.images.length ? <img width={"100%"} src={album.images[0].url} alt=""/> : <div>No Image</div>}</div>
           <div class="searchCol">{album.name}</div>
-          <div class="searchCol">{album.release_date_precision !== "year" ? album.release_date.substring(0, 4) : album.release_date}</div>
+          <div class="searchCol">{album.artists[0].name}</div>
+          {isEditing === album.id ? <div class="searchCol"><input id="searchBar" placeholder="Search Spotify..." type="text" /></div>
+          : <div class="searchCol">{album.release_date_precision !== "year" ? album.release_date.substring(0, 4) : album.release_date}
+          </div>}
         </div>
+        {/* {isEditing !== album.id ? <FaEdit class="editButton" onClick={() => { setEditStatus(album.id) }}></FaEdit> : <FaTrash class="delButton" ></FaTrash>} */}
+        <FaEdit class="editButton" onClick={() => {handleClickOpen(album)}}></FaEdit>
+        {/* onClick={setEditStatus(album.id)} */}
       </div>
+      
   ))
 }
   return (
@@ -336,6 +446,12 @@ const renderAlbums = () => {
     </Box>
     { term !== "" ? <button onClick={getTracks}>Fill from Top Tracks of {term}</button> : <br></br>}
   </TabPanel>
+  <SimpleDialog
+        selectedValue={selectedValue}
+        editAlbum={editAlbum}
+        open={open}
+        onClose={handleClose}
+      />
   </TabContext>
 
     {/* <button type={"submit"}>Search</button> */}
